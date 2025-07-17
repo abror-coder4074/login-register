@@ -33,20 +33,21 @@ const Login = () => {
 
         //     })
 
-        try{
+        try {
             lord.post("https://dummyjson.com/auth/login", obj)
-        
-            .then((res) => {
-                console.log("Login success", res.data);
-                navigate("/home")
-            })
-            .catch((error) => {
-                console.log("Login failed", error);
-                
-            })
-        }catch(error){
+
+                .then((res) => {
+                    console.log("Login success", res.data);
+                    navigate("/home")
+                })
+                .catch((error) => {
+                    console.log("Login failed", error);
+
+                })
+        } catch (error) {
             console.log(error);
         }
+
     }
 
     return (
