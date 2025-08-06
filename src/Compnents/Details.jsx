@@ -1,37 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import { data, useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import lord from '../axios'
 
 const Details = () => {
-    const [users, setUsers] = useState([])
-    const navigate = useNavigate()
     const { id } = useParams()
+    const [product, setProduct] = useState(null)
 
     useEffect(() => {
-        fetch(`https://dummyjson.com/products/${id}`)
-            .then(res => res.json())
-            .then(data => {
-                setUsers(data)
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }, [])
+        lord.get(`/product/${id}`)
+            .then(res => setProduct(res.data))
+            .catch(err => console.error("Error loading product:", err))
+    }, [id])
+
+    if (!product) return <p className='text-white text-center mt-20'>Loading...</p>
 
     return (
-        <div className='bg-gradient-to-br from to-blue-900 to bg-red-900 w-full py-60 flex flex-wrap items-start justify-center gap-2.5'>
-            {
-                <button className=' border-blue-100 '>
-                    <div className='w-80 flex flex-col items-center justify-center text-2xl text-white border-2 border-red-500 py-2.5 px-11 bg-gradient-to-br from bg-red-700 to-blue-700'>
-                        <img src={users.images} alt="" />
-                        <h1 className='mb-4'>{users.title}</h1>
-                        <h2>Brand: {users.brand}</h2>
-                        <h3>Price: {users.price}</h3>
-                        <h5>Rating: {users.rating}</h5>
-                        <div>
-                        </div>
-                    </div>
-                </button>
-            }
+        <div className='bg-gradient-to-br from-blue-900 to-red-900 min-h-screen py-20 px-5 flex justify-center'>
+            <div className='bg-white p-8 rounded-lg shadow-lg max-w-md text-center'>
+                <img src={product.images} alt={product.title} className='w-full h-64 object-cover rounded mb-4' />
+                <h1 className='text-2xl font-bold'>{product.title}</h1>
+                <p className='mt-2'>Brand: {product.brand}</p>
+                <p>Price: ${product.price}</p>
+                <p>Rating: {product.rating}</p>
+            </div>
         </div>
     )
 }
